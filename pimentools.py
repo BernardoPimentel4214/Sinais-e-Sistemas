@@ -20,11 +20,13 @@ from IPython.display import display
 t = sp.symbols('t')
 s = sp.symbols('s')
 
+
 #################
 #
 #       1
-# 
+#
 #################
+
 
 def resolver_sistema_LCIT(Q, x, conds, P=[1], T=6, deslocamentos_dirac=[0]):
     # Obtém a resposta total e as funções de interesse nesse processo:
@@ -242,3 +244,56 @@ def resolve_EDO(Q, x, P, conds):
     y = sp.dsolve(sp.Eq(EDO, entrada), y, ics=conds_iniciais)
 
     return y.rhs
+
+
+#################
+#
+#       2
+#
+#################
+
+
+def plota_espectros_s(x, N, w_0):
+    amplitude = []
+    fase = []
+    nw_0 = []
+    T_0  = 2*np.pi / w_0
+
+    for n in range(-N, N + 1):
+        D_n = sp.integrate(x * sp.exp(-sp.I*n*w_0*t), (t, 0, T_0), conds='none') / T_0
+        
+        # Obtém amplitude da harmônica:
+        D_n = complex(sp.N(D_n))
+        re = D_n.real
+        im = D_n.imag
+        modulo = np.sqrt(re**2 + im**2)
+        amplitude.append(modulo)
+        
+        # Obtém fase da harmônica:
+        arg = np.angle(D_n)
+        if (np.isnan(arg)):
+            arg = 0
+        fase.append(arg)
+
+        # Legenda do eixo horizontal do plot:
+        match n:
+            case -1:
+                nw_0.append(r"$-\omega_0$")
+            case 0:
+                nw_0.append("0")
+            case 1:
+                nw_0.append(r"$\omega_0$")
+            case _:
+                nw_0.append(str(n) + r"$\omega_0$")
+
+    # Plot:
+    fig, axs = plt.subplots(2, 1, figsize=(8, 7))
+    axs[0].stem(nw_0, amplitude)
+    axs[0].set_ylabel(r"$|D_n$|", rotation=1)
+    axs[0].set_title("Espectro de Amplitude")
+
+    axs[1].stem(nw_0, fase)
+    axs[1].set_ylabel(r"$∠D_n$", rotation=1)
+    axs[1].set_title("Espectro de Fase")
+    plt.show()
+
