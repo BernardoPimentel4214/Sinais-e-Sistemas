@@ -297,3 +297,46 @@ def plota_espectros_s(x, N, w_0):
     axs[1].set_title("Espectro de Fase")
     plt.show()
 
+
+def transformada_de_fourier(x, t, w):
+    dt = t[1] - t[0]
+    return dt*np.exp(-1j*np.outer(w, t)) @ x
+
+def transformada_de_fourier_inversa(X, w, t):
+    dw = w[1] - w[0]
+    return (dw/(2*np.pi))*np.exp(1j*np.outer(t, w)) @ X
+
+
+
+def Tx_DSB_SC(m, H, w_c, T, t, w):
+    mp = m*np.cos(w_c*t)
+    MP = transformada_de_fourier(mp, t, w)
+    e  = m*(np.cos(w_c*t)**2)
+    E  = transformada_de_fourier(e, t, w)
+    y  = transformada_de_fourier_inversa(E*H, w, t)
+
+    fig, axs = plt.subplots(4, 1, figsize=(10, 13))
+
+    axs[0].plot(t, mp)
+    axs[0].plot(t, np.cos(w_c*t)*max(m), linestyle='--', alpha=0.3)
+    axs[0].set_xlabel(r'$t$')
+    axs[0].set_ylabel(r'$m(t)*cos(\omega_c t)$')
+
+    axs[1].plot(w, MP)
+    axs[1].set_xlabel(r'$\omega$')
+    axs[1].set_ylabel(r'$\frac{1}{2}[M(\omega + \omega_c) + M(\omega - \omega_c)]$')
+
+    axs[2].plot(w, H)
+    axs[2].plot(w, E)
+    axs[2].set_xlabel(r'$\omega$')
+    axs[2].set_ylabel(r'$\frac{1}{4}[M(\omega + 2\omega_c) + M(\omega - 2\omega_c)] + \frac{1}{2}M(\omega)$')
+
+    axs[3].plot(t, y)
+    axs[3].set_xlabel('$t$')
+    axs[3].set_ylabel('$Sinal Recuperado$')
+
+    for i in range(4):
+        axs[i].grid(True)
+
+    plt.show()
+
