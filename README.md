@@ -70,7 +70,7 @@
         Notebook 4 - Resposta em Frequência e Filtros
     </h2>
     <p style="text-indent: 2em;">
-        TODO
+        WIP
     <h2>
         Notebook 5 - Análise no Espaço de Estados
     </h2>
