@@ -12,7 +12,7 @@
         <p style="text-indent: 2em;">
         Contudo, os tópicos abordados nos notebooks disponíveis são abrangentes o suficiente para que possam ser aproveitados por qualquer estudante dessa disciplina. Adotando o livro <i>Sinais e Sistemas Lineares</i> do autor <b>Bhagwandas Pannalal Lathi</b>, assim como as notas de aula do professor Eduardo Tognetti como referências principais, o objetivo dos arquivos é fornecer:
     <ul>
-        <li>Uma visão teórica sucinta dos conceitos principais cobertos no curso de SSTC</li>
+        <li>Uma visão teórica <b>sucinta</b> dos conceitos principais cobertos no curso de SSTC</li>
         <li>Células interativas que sirvam para resolver problemas e ilustrar ideias relacionados ao assunto discutido</li>
     </ul>
     <h2>
@@ -47,14 +47,25 @@
             <li>Existência e convergência da série de Fourier</li>
             <li>Origem da transformada de Fourier e suas propriedades</li>
             <li>Relação entrada e saída de sistemas LCIT no regime da frequência</li>
+            <li>Células para: plotar os espectros de amplitude e de fase de sinais; visualizar o fenômeno Gibbs; calcular a transformada de Fourier de um sinal.</li>
         </ul>
     <p style="text-indent: 2em;">
-        E por fim, uma célula que explora as características da transformada de Fourier, simulando a transmissão de um sinal por modulação em amplitude DSB-SC.
+        E por fim, uma célula que explora as propriedades da transformada de Fourier, simulando numericamente a transmissão de um sinal por modulação em amplitude DSB-SC.
     <h2>
         Notebook 3 - Transformada de Laplace
     </h2>
     <p style="text-indent: 2em;">
-        WIP
+        Aborda-se a <b>transformada de Laplace</b> como uma generalização da transformada de Fourier, revisando as principais propriedades dessa ferramenta, para que possam ser aplicadas em contextos de engenharia no notebook 4.
+        <p style="text-indent: 2em;">
+        É estudado:
+        <ul>
+            <li>As vantagens da transformada de Laplace sobre a de Fourier</li>
+            <li>A região de convergência</li>
+            <li>EDOs como equações algébricas</li>
+            <li>Funções de Transferência</li>
+        </ul>
+        <p style="text-indent: 2em;">
+        Há também código para calcular a transformada de Laplace de um sinal, expondo o diagrama de polos e zeros.
     <h2>
         Notebook 4 - Resposta em Frequência e Filtros
     </h2>
