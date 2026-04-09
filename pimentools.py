@@ -289,7 +289,7 @@ def plota_espectros_s(x, N, w_0):
     # Plot:
     fig, axs = plt.subplots(2, 1, figsize=(8, 7))
     axs[0].stem(nw_0, amplitude)
-    axs[0].set_ylabel(r"$|D_n$|", rotation=1)
+    axs[0].set_ylabel(r"$|D_n|$", rotation=1)
     axs[0].set_title("Espectro de Amplitude")
 
     axs[1].stem(nw_0, fase)
@@ -305,7 +305,6 @@ def transformada_de_fourier(x, t, w):
 def transformada_de_fourier_inversa(X, w, t):
     dw = w[1] - w[0]
     return (dw/(2*np.pi))*np.exp(1j*np.outer(t, w)) @ X
-
 
 
 def Tx_DSB_SC(m, H, w_c, T, t, w):
@@ -338,5 +337,51 @@ def Tx_DSB_SC(m, H, w_c, T, t, w):
     for i in range(4):
         axs[i].grid(True)
 
+    plt.show()
+
+
+def plota_espectros_t(x, T, w_c, t, w):
+    # Expressão da transformada:
+    X = sp.integrate(x*sp.exp(-sp.I*w*t), (t, -sp.oo, sp.oo), conds='none')
+    display("F{x(t)}: ",X)
+    # Demais cálculos são numéricos:
+    x_num = sp.lambdify(t, x)
+
+    t_i = np.linspace(-T, T, 1000)
+    w_i = np.linspace(-1.5*w_c, 1.5*w_c, 1000)
+
+    X_num = transformada_de_fourier(x_num(t_i), t_i, w_i)
+
+    # Obtém espectro de amplitude:
+    re = X_num.real
+    im = X_num.imag
+    amplitude = np.sqrt(re**2 + im**2)
+
+    X_num = transformada_de_fourier(x_num(200*t_i), 200*t_i, w_i)
+
+    # Obtém espectro dee fase:
+    fase = np.angle(X_num)
+    fase[np.abs(X_num) < 1e-6] = np.nan
+    for n in range(len(fase)):
+        if (np.isnan(fase[n])):
+            fase[n] = 0
+
+    # Plot:
+    fig, axs = plt.subplots(3, 1, figsize=(8, 8), layout='constrained')
+    axs[0].plot(t_i, x_num(t_i))
+    axs[0].set_ylabel(r"$x(t)$", rotation=1)
+    axs[0].set_title("Sinal no Tempo")
+
+    axs[1].plot(w_i, amplitude)
+    axs[1].set_ylabel(r"$|H(\omega)|$", rotation=1)
+    axs[1].set_title("Espectro de Amplitude")
+
+    axs[2].plot(w_i, fase)
+    axs[2].set_ylabel(r"$∠H(\omega)$", rotation=1)
+    axs[2].set_title("Espectro de Fase")
+    axs[2].set_xticklabels([])
+
+    for i in range(3):
+        axs[i].grid(True)
     plt.show()
 
