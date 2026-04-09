@@ -357,8 +357,6 @@ def plota_espectros_t(x, T, w_c, t, w):
     im = X_num.imag
     amplitude = np.sqrt(re**2 + im**2)
 
-    X_num = transformada_de_fourier(x_num(200*t_i), 200*t_i, w_i)
-
     # Obtém espectro dee fase:
     fase = np.angle(X_num)
     fase[np.abs(X_num) < 1e-6] = np.nan
