@@ -383,3 +383,65 @@ def plota_espectros_t(x, T, w_c, t, w):
         axs[i].grid(True)
     plt.show()
 
+
+#################
+#
+#       3
+#
+#################
+
+
+def plota_Laplace(x):
+    # Obtém expressão da transformada, o denominador e o numerador dela:
+    X = sp.laplace_transform(x, t, s, noconds=True)
+    num, den = sp.fraction(X)
+    num = sp.simplify(num)
+    den = sp.simplify(den)
+
+    # Obtém polos e zeros para plotar:
+    z = sp.roots(num, s)
+    p = sp.roots(den, s)
+    zeros = list(z.keys())
+    polos = list(p.keys())
+
+    polos_unicos = []
+    polos_repetidos = []
+    for polo in polos:
+        if p[polo] > 1:
+            polos_repetidos.append(polo)
+        else:
+            polos_unicos.append(polo)
+
+    re_z, im_z = [], []
+    for zero in zeros:
+        re_z.append(float(sp.re(zero)))
+        im_z.append(float(sp.im(zero)))
+
+    re_p_u, im_p_u = [], []
+    for polo in polos_unicos:
+        for n in range(p[polo]):
+            re_p_u.append(float(sp.re(polo)))
+            im_p_u.append(float(sp.im(polo)))
+
+    re_p_r, im_p_r = [], []
+    for polo in polos_repetidos:
+        for n in range(p[polo]):
+            re_p_r.append(float(sp.re(polo)))
+            im_p_r.append(float(sp.im(polo)))
+
+    # Plot
+    fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+    l1 = ax.scatter(re_p_u, im_p_u, marker='x', s=200, color='Orange', linewidths=3)
+    l2 = ax.scatter(re_p_r, im_p_r, marker='X', s=200, color='Red')
+    l3 = ax.scatter(re_z, im_z, marker='o', s=150, color='Blue', linewidths=3)
+
+    ax.grid(True)
+    if ax.get_xlim()[1] < 0:
+        ax.set_xlim((ax.get_xlim()[0], 0.5))
+    plt.axhline(y=0, color='k', linestyle='-')
+    l4 = plt.axvline(x=0, color='k', linestyle='--')
+    ax.legend((l1, l2, l3, l4), ('Raízes não repetidas', 'Raízes repetidas', 'Zeros', 'Eixo imaginário'), loc='upper right', shadow=True)
+
+    X_s = sp.symbols('X(s)') 
+    display(sp.Eq(X_s, X))
+    plt.show()
